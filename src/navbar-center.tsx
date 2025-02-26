@@ -163,7 +163,7 @@ const NavbarCenter = () => {
   );
 
   return (
-    <nav className="absolute left-0 right-0 top-5 mx-auto flex h-min w-[70%] items-center justify-between rounded-2xl border border-gray-200 bg-white px-6 py-4 backdrop-blur-2xl">
+    <nav className="absolute left-0 right-0 top-5 mx-auto flex h-min w-[90%] xl:w-[70%] items-center justify-between rounded-2xl border border-gray-200 bg-white px-6 py-4 backdrop-blur-2xl">
       <div className="flex items-center gap-[30px]">
         <div className="h-[40px] w-[112px] rounded-xl bg-[#f3f4f6]"></div>
 
