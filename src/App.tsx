@@ -34,9 +34,13 @@ function App() {
         )}
       </AnimatePresence>
 
+      <h4 className="absolute bottom-6 left-10 text-base font-mono font-medium">
+        Made by <a href="https://www.victorwilliams.me" target="_blank" className="underline transition underline-offset-2 hover:text-gray-500 hover:no-underline">Victor Williams</a>
+      </h4>
+
       <motion.button
         onClick={() => setType(type === "fixed" ? "floating" : "fixed")}
-        className="absolute bottom-6 right-6 rounded-xl bg-[#1c1d1f] px-[15px] py-2 text-[15px] font-medium leading-[20px] tracking-[-0.1px] text-[#f3f4f6]"
+        className="absolute bottom-6 right-10 rounded-xl bg-[#1c1d1f] px-[15px] py-2 text-[15px] font-medium leading-[20px] tracking-[-0.1px] text-[#f3f4f6]"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         layout
