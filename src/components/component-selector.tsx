@@ -59,7 +59,7 @@ export default function ComponentSelector({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 10 }}
             transition={{ duration: 0.15 }}
-            className="absolute bottom-10 right-0 z-10 h-min w-full min-w-[180px] overflow-hidden rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+            className="absolute bottom-10 right-0 z-10 h-min w-full min-w-[180px] overflow-hidden rounded-xl bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
           >
             <div className="space-y-0">
               {options.map((option) => (

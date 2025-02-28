@@ -2,16 +2,24 @@ import { motion } from "framer-motion";
 
 type ExpandState = "stretchX" | "stretchY" | null;
 
-interface AudioToggleButtonProps {
+interface AudioButtonProps {
   expand: ExpandState;
-  onClick: () => void;
+  setExpand: (value: ExpandState) => void;
+  setProgressPosition: (value: number) => void;
 }
 
-export const AudioToggleButton = ({ expand, onClick }: AudioToggleButtonProps) => {
+export const AudioToggleButton = ({
+  expand,
+  setExpand,
+  setProgressPosition,
+}: AudioButtonProps) => {
   return (
     <motion.div
       whileTap={{ scale: 0.85 }}
-      onClick={onClick}
+      onClick={() => {
+        setProgressPosition(0);
+        setExpand(expand === null ? "stretchX" : null);
+      }}
       animate={{
         backgroundColor: expand ? "#fff" : "#f4f4f4",
       }}
