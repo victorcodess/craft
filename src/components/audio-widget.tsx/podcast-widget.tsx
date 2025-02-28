@@ -209,7 +209,7 @@ const PodcastWidget = () => {
       onAnimationComplete={() => {
         console.log("Width animation completed");
       }}
-      className="absolute top-[305px] flex h-[50px] w-[55px] cursor-pointer flex-col items-center justify-start overflow-hidden rounded-[25px] bg-[#F4F4F4]"
+      className="absolute left-0 right-0 top-[305px] mx-auto flex h-[50px] w-[50px] cursor-pointer flex-col items-center justify-start overflow-hidden rounded-[25px] bg-[#F4F4F4]"
     >
       <AnimatePresence>
         {expand && (
@@ -240,7 +240,7 @@ const PodcastWidget = () => {
                 {isPlaying ? (
                   <motion.img
                     key="pause"
-                    src="/pause.png"
+                    src="/audio-widget/pause.png"
                     alt="Pause"
                     className="h-[20px] w-[18px] cursor-pointer"
                     onClick={handlePlayPause}
@@ -252,7 +252,7 @@ const PodcastWidget = () => {
                 ) : (
                   <motion.img
                     key="play"
-                    src="/play.png"
+                    src="/audio-widget/play.png"
                     alt="Play"
                     className="h-[26px] w-[26px] cursor-pointer"
                     onClick={handlePlayPause}
@@ -396,15 +396,15 @@ const PodcastWidget = () => {
           setExpand(expand === null ? "stretchX" : null);
         }}
         animate={{
-          backgroundColor: expand ? "#fff" : "#F4F4F4",
+          backgroundColor: expand ? "#fff" : "#f4f4f4",
         }}
         transition={{
           backgroundColor: { duration: 0.05, delay: !expand ? 0.5 : 0 },
           scale: { type: "spring" },
         }}
-        className="absolute right-[5.9px] top-[5.9px] flex h-[38px] w-[38px] cursor-pointer items-center justify-center rounded-full bg-[#fff]"
+        className="absolute right-[5.9px] top-[5.9px] flex h-[38px] w-[38px] cursor-pointer items-center justify-center rounded-full bg-[#f4f4f4]"
       >
-        <img src="/audio.png" className="w-6" alt="" />
+        <img src="/audio-widget/audio.png" className="w-6" alt="" />
       </motion.div>
     </motion.div>
   );

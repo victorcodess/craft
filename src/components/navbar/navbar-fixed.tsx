@@ -140,7 +140,7 @@ const ResourcesDropdown = memo(() => (
   </div>
 ));
 
-const NavbarCenter = () => {
+const NavbarFixed = () => {
   const [hovering, setHovering] = useState<"platform" | "resources" | null>(
     null,
   );
@@ -163,7 +163,7 @@ const NavbarCenter = () => {
   );
 
   return (
-    <nav className="absolute left-0 right-0 top-5 mx-auto flex h-min w-[90%] xl:w-[70%] items-center justify-between rounded-2xl border border-gray-200 bg-white px-6 py-4 backdrop-blur-2xl">
+    <nav className="flex w-full items-center justify-between border-b border-gray-200 bg-white px-6 py-4 shadow-lg">
       <div className="flex items-center gap-[30px]">
         <div className="h-[40px] w-[112px] rounded-xl bg-[#f3f4f6]"></div>
 
@@ -185,7 +185,7 @@ const NavbarCenter = () => {
           <AnimatePresence mode="popLayout">
             {hovering && (
               <motion.div
-                className="dropdown-container absolute z-50 left-0 top-[44px] flex min-w-[610px] overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-xl"
+                className="dropdown-container absolute left-0 top-[44px] z-50 flex min-w-[610px] overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-xl"
                 variants={dropdownVariants}
                 initial="hidden"
                 animate="visible"
@@ -248,4 +248,4 @@ const NavbarCenter = () => {
   );
 };
 
-export default NavbarCenter;
+export default NavbarFixed;
