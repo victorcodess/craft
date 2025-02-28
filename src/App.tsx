@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Navbar from "./components/navbar/navbar-fixed";
 import NavbarCenter from "./components/navbar/navbar-center";
-import PodcastWidget from "./components/audio-widget.tsx/podcast-widget";
+import PodcastWidget from "./components/audio-widget.tsx/audio-widget";
 import ComponentSelector from "./components/component-selector";
 import Toolbar from "./components/figma-toolbar/toolbar";
 
@@ -22,7 +22,7 @@ function App() {
         return componentParam;
       }
     }
-    return "audio-widget"; // Default to floating if no valid URL parameter
+    return "audio-widget";
   });
 
   const [isMobile, setIsMobile] = useState(false);
@@ -159,7 +159,7 @@ function App() {
       <AnimatePresence mode="wait">{renderActiveComponent()}</AnimatePresence>
 
       <motion.div
-        className="absolute bottom-0 left-0 right-0 flex w-full flex-col-reverse items-center justify-between space-y-4 p-4 pb-6 sm:p-6 md:flex-row md:items-center md:space-y-0 md:px-10"
+        className="absolute bottom-0 left-0 right-0 flex w-full flex-col-reverse items-center justify-between space-y-4 p-4 pb-6 sm:p-6 md:flex-row md:items-end md:space-y-0 md:px-10 md:pb-10"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.2 }}
