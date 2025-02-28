@@ -4,14 +4,15 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Navbar from "./navbar";
 import NavbarCenter from "./navbar-center";
+import PodcastWidget from "./podcast-widget";
 
 function App() {
   const [type, setType] = useState<"fixed" | "floating">("floating");
-  const [isMobile, setIsMobile] = useState(false);
+  // const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     const checkIfMobile = () => {
-      setIsMobile(window.innerWidth < 1024);
+      // setIsMobile(window.innerWidth < 1024);
     };
 
     checkIfMobile();
@@ -20,28 +21,38 @@ function App() {
     return () => window.removeEventListener("resize", checkIfMobile);
   }, []);
 
-  if (isMobile) {
+  const podcast = true;
+
+  if (podcast) {
     return (
-      <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-br from-slate-100 to-slate-200 px-4 text-center">
-        <motion.h1
-          className="mb-4 text-3xl font-bold text-gray-800"
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          Please view on desktop
-        </motion.h1>
-        <motion.p
-          className="text-lg text-gray-600"
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.05, duration: 0.5 }}
-        >
-          This demo is optimized for larger screens.
-        </motion.p>
-      </div>
+      <main className="relative flex min-h-screen w-full items-center justify-center bg-slate-50">
+        <PodcastWidget />
+      </main>
     );
   }
+
+  // if (isMobile) {
+  //   return (
+  //     <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-br from-slate-100 to-slate-200 px-4 text-center">
+  //       <motion.h1
+  //         className="mb-4 text-3xl font-bold text-gray-800"
+  //         initial={{ opacity: 0, y: 10 }}
+  //         animate={{ opacity: 1, y: 0 }}
+  //         transition={{ duration: 0.5 }}
+  //       >
+  //         Please view on desktop
+  //       </motion.h1>
+  //       <motion.p
+  //         className="text-lg text-gray-600"
+  //         initial={{ opacity: 0, y: 15 }}
+  //         animate={{ opacity: 1, y: 0 }}
+  //         transition={{ delay: 0.05, duration: 0.5 }}
+  //       >
+  //         This demo is optimized for larger screens.
+  //       </motion.p>
+  //     </div>
+  //   );
+  // }
 
   return (
     <main className="relative min-h-screen w-full bg-slate-50">
