@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import cursor from "../../../public/figma-toolbar/cursor.svg";
-import arrow from "../../../public/figma-toolbar/arrow.svg";
-import frame from "../../../public/figma-toolbar/frame.svg";
-import rectangle from "../../../public/figma-toolbar/rectangle.svg";
-import pen from "../../../public/figma-toolbar/pen.svg";
-import text from "../../../public/figma-toolbar/text.svg";
-import comment from "../../../public/figma-toolbar/comment.svg";
-import actions from "../../../public/figma-toolbar/actions.svg";
+import cursor from "../../assets/figma-toolbar/cursor.svg";
+import arrow from "../../assets/figma-toolbar/arrow.svg";
+import frame from "../../assets/figma-toolbar/frame.svg";
+import rectangle from "../../assets/figma-toolbar/rectangle.svg";
+import pen from "../../assets/figma-toolbar/pen.svg";
+import text from "../../assets/figma-toolbar/text.svg";
+import comment from "../../assets/figma-toolbar/comment.svg";
+import actions from "../../assets/figma-toolbar/actions.svg";
 
 const ToolbarDesign = ({ isDev }: { isDev: boolean }) => {
   const [selectedButton, setSelectedButton] = useState<string | null>("cursor");

@@ -1,4 +1,6 @@
 import { AnimatePresence, motion } from "framer-motion";
+import pause from "../../assets/audio-widget/pause.png";
+import play from "../../assets/audio-widget/play.png";
 
 type ExpandState = "stretchX" | "stretchY" | null;
 
@@ -55,7 +57,7 @@ export const PlaybackControls = ({
           {isPlaying ? (
             <motion.img
               key="pause"
-              src="/audio-widget/pause.png"
+              src={pause}
               alt="Pause"
               className="h-[20px] w-[18px] cursor-pointer"
               onClick={handlePlayPause}
@@ -67,7 +69,7 @@ export const PlaybackControls = ({
           ) : (
             <motion.img
               key="play"
-              src="/audio-widget/play.png"
+              src={play}
               alt="Play"
               className="h-[26px] w-[26px] cursor-pointer"
               onClick={handlePlayPause}

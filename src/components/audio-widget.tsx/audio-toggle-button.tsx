@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import audio from "../../assets/audio-widget/audio.png";
 
 type ExpandState = "stretchX" | "stretchY" | null;
 
@@ -29,7 +30,7 @@ export const AudioToggleButton = ({
       }}
       className="absolute right-[5.9px] top-[5.9px] flex h-[38px] w-[38px] cursor-pointer items-center justify-center rounded-full bg-[#f4f4f4]"
     >
-      <img src="/audio-widget/audio.png" className="w-6" alt="" />
+      <img src={audio} className="w-6" alt="" />
     </motion.div>
   );
 };

@@ -26,7 +26,7 @@ function App() {
   });
 
   const [isMobile, setIsMobile] = useState(false);
-  console.log("isMobile", isMobile);
+  // console.log("isMobile", isMobile);
 
   useEffect(() => {
     const checkIfMobile = () => {

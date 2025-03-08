@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import dev from "../../../public/figma-toolbar/dev.svg";
+import dev from "../../assets/figma-toolbar/dev.svg";
 
 const Switch = ({
   isDev,
