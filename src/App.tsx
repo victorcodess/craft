@@ -16,7 +16,7 @@ function App() {
       const componentParam = params.get("component");
       if (
         componentParam &&
-        ["fixed-nav", "floating-nav", "audio-widget", "figma-toolbar"].includes(
+        ["fixed-nav", "floating-nav", "audio-widget", "memory-widget", "figma-toolbar"].includes(
           componentParam,
         )
       ) {
