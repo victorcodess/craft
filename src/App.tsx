@@ -4,9 +4,10 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Navbar from "./components/navbar/navbar-fixed";
 import NavbarCenter from "./components/navbar/navbar-center";
-import PodcastWidget from "./components/audio-widget.tsx/audio-widget";
+import PodcastWidget from "./components/audio-widget/audio-widget";
 import ComponentSelector from "./components/component-selector";
 import Toolbar from "./components/figma-toolbar/toolbar";
+import MemoryWidget from "./components/memory-lane/memory-widget";
 
 function App() {
   const [activeComponent, setActiveComponent] = useState<string>(() => {
@@ -26,7 +27,6 @@ function App() {
   });
 
   const [isMobile, setIsMobile] = useState(false);
-  // console.log("isMobile", isMobile);
 
   useEffect(() => {
     const checkIfMobile = () => {
@@ -126,6 +126,19 @@ function App() {
             <PodcastWidget />
           </motion.div>
         );
+      case "memory-widget":
+        return (
+          <motion.div
+            key="memory-widget"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.35, ease: "easeInOut" }}
+            className="flex justify-center"
+          >
+            <MemoryWidget />
+          </motion.div>
+        );
       case "figma-toolbar":
         return (
           <motion.div
@@ -155,7 +168,7 @@ function App() {
   };
 
   return (
-    <main className="relative min-h-screen w-full bg-white">
+    <main className="relative min-h-screen w-full bg-black/0">
       <AnimatePresence mode="wait">{renderActiveComponent()}</AnimatePresence>
 
       <motion.div

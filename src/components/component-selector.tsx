@@ -10,9 +10,10 @@ type ComponentOption = {
 };
 
 const options: ComponentOption[] = [
+  { id: "memory-widget", label: "Memory Widget" },
+  { id: "audio-widget", label: "Audio Widget" },
   { id: "fixed-nav", label: "Fixed Navbar" },
   { id: "floating-nav", label: "Floating Navbar" },
-  { id: "audio-widget", label: "Audio Widget" },
   { id: "figma-toolbar", label: "Figma Toolbar" },
 ];
 
