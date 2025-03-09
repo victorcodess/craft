@@ -16,9 +16,13 @@ function App() {
       const componentParam = params.get("component");
       if (
         componentParam &&
-        ["fixed-nav", "floating-nav", "audio-widget", "memory-widget", "figma-toolbar"].includes(
-          componentParam,
-        )
+        [
+          "fixed-nav",
+          "floating-nav",
+          "audio-widget",
+          "memory-widget",
+          "figma-toolbar",
+        ].includes(componentParam)
       ) {
         return componentParam;
       }
@@ -173,9 +177,9 @@ function App() {
 
       <motion.div
         className="absolute bottom-0 left-0 right-0 flex w-full flex-col-reverse items-center justify-between space-y-4 p-4 pb-6 sm:p-6 md:flex-row md:items-end md:space-y-0 md:px-10 md:pb-10"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.2 }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.35, ease: "easeInOut" }}
       >
         <h4 className="mt-8 font-mono text-sm font-medium sm:text-base md:mt-0">
           Made by{" "}

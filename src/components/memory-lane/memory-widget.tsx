@@ -6,6 +6,7 @@ import imgOne from "../../assets/memory-widget/img_one.avif";
 import imgTwo from "../../assets/memory-widget/img_two.avif";
 import imgThree from "../../assets/memory-widget/img_three.avif";
 import imgFour from "../../assets/memory-widget/img_four.avif";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface MonthData {
   month: string;
@@ -14,7 +15,9 @@ interface MonthData {
 }
 
 const MemoryWidget = () => {
-  const [centeredMonthIndex, setCenteredMonthIndex] = useState(5);
+  const [centeredMonthIndex, setCenteredMonthIndex] = useState(0);
+
+  console.log("centeredMonthIndex", centeredMonthIndex);
 
   const data: MonthData[] = [
     {
@@ -87,7 +90,14 @@ const MemoryWidget = () => {
     switch (numMemories) {
       case 0:
         return (
-          <div className="flex flex-col items-center gap-3">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0, transition: { delay: 0 } }}
+            transition={{ duration: 0.3, ease: "easeInOut", delay: 0.1 }}
+            key="none"
+            className="flex flex-col items-center gap-3"
+          >
             <img
               src={cloud || "/placeholder.svg"}
               alt=""
@@ -96,103 +106,381 @@ const MemoryWidget = () => {
             <p className="text-[9.5px] tracking-[0.2px] text-white/30">
               No memories made this month
             </p>
-          </div>
+          </motion.div>
         );
       case 1:
         return (
-          <div className="">
-            <div className="h-[180px] w-[180px] translate-y-[-12px] rotate-[5deg] rounded-lg border-[8px] border-white bg-white">
+          <motion.div key="one" className="">
+            <motion.div
+              initial={{
+                translateY: -280,
+                rotate: "45deg",
+              }}
+              animate={{ translateY: -12, rotate: "5deg" }}
+              exit={{
+                translateY: 280,
+                rotate: "25deg",
+                transition: { duration: 0.3, delay: 0 },
+              }}
+              transition={{
+                translateY: {
+                  type: "spring",
+                  bounce: 0.45,
+                  duration: 0.6,
+                  delay: 0.3,
+                },
+                rotate: {
+                  type: "spring",
+                  bounce: 0.45,
+                  duration: 0.7,
+                  delay: 0.3,
+                },
+              }}
+              className="h-[180px] w-[180px] translate-y-[-12px] rotate-[5deg] rounded-lg border-[8px] border-white bg-white"
+            >
               <img
                 src={memories[0] || "/placeholder.svg"}
                 className="h-full w-full rounded-md"
                 alt=""
               />
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         );
       case 2:
         return (
-          <div className="grid grid-cols-[1fr] grid-rows-[1fr]">
-            <div className="col-[1] row-[1] h-[160px] w-[160px] translate-x-[-30px] translate-y-[-10px] rotate-[15deg] overflow-hidden rounded-lg border-[6px] border-white bg-white">
+          <motion.div
+            key="two"
+            className="grid grid-cols-[1fr] grid-rows-[1fr]"
+          >
+            <motion.div
+              initial={{
+                translateX: -30,
+                translateY: -280,
+                rotate: "-8deg",
+              }}
+              animate={{ translateX: -30, translateY: -10, rotate: "15deg" }}
+              exit={{
+                translateY: 260,
+                rotate: "50deg",
+                transition: { duration: 0.4, delay: 0.1 },
+              }}
+              transition={{
+                translateY: {
+                  type: "spring",
+                  bounce: 0.45,
+                  duration: 0.6,
+                  delay: 0.3,
+                },
+                rotate: {
+                  type: "spring",
+                  bounce: 0.45,
+                  duration: 0.7,
+                  delay: 0.3,
+                },
+              }}
+              className="col-[1] row-[1] h-[160px] w-[160px] translate-x-[-30px] translate-y-[-10px] rotate-[15deg] overflow-hidden rounded-lg border-[6px] border-white bg-white"
+            >
               <img
                 src={memories[0] || "/placeholder.svg"}
                 className="h-full w-full rounded-md"
                 alt=""
               />
-            </div>
+            </motion.div>
 
-            <div className="col-[1] row-[1] h-[160px] w-[160px] translate-x-[30px] translate-y-[-35px] rotate-[-20deg] overflow-hidden rounded-lg border-[6px] border-white bg-white">
+            <motion.div
+              initial={{
+                translateX: 30,
+                translateY: -280,
+                rotate: "-60deg",
+              }}
+              animate={{ translateX: 30, translateY: -35, rotate: "-20deg" }}
+              exit={{
+                translateY: 290,
+                rotate: "40deg",
+                transition: { duration: 0.35, delay: 0 },
+              }}
+              transition={{
+                translateY: {
+                  type: "spring",
+                  bounce: 0.45,
+                  duration: 0.6,
+                  delay: 0.5,
+                },
+                rotate: {
+                  type: "spring",
+                  bounce: 0.45,
+                  duration: 0.7,
+                  delay: 0.5,
+                },
+              }}
+              className="col-[1] row-[1] h-[160px] w-[160px] translate-x-[30px] translate-y-[-35px] rotate-[-20deg] overflow-hidden rounded-lg border-[6px] border-white bg-white"
+            >
               <img
                 src={memories[1] || "/placeholder.svg"}
                 className="h-full w-full rounded-md"
                 alt=""
               />
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         );
       case 3:
         return (
-          <div className="grid grid-cols-[1fr] grid-rows-[1fr]">
-            <div className="mr- [70px] col-[1] row-[1] h-[120px] w-[120px] translate-x-[50px] translate-y-[-30px] rotate-[35deg] overflow-hidden rounded-lg border-[6px] border-white bg-white">
+          <motion.div
+            key="three"
+            className="grid grid-cols-[1fr] grid-rows-[1fr]"
+          >
+            <motion.div
+              initial={{
+                translateX: 50,
+                translateY: -260,
+                rotate: "10deg",
+              }}
+              animate={{ translateX: 50, translateY: -30, rotate: "35deg" }}
+              exit={{
+                translateY: 260,
+                rotate: "40deg",
+                transition: { duration: 0.3, delay: 0.1 },
+              }}
+              transition={{
+                translateY: {
+                  type: "spring",
+                  bounce: 0.45,
+                  duration: 0.6,
+                  delay: 0.3,
+                },
+                rotate: {
+                  type: "spring",
+                  bounce: 0.45,
+                  duration: 0.7,
+                  delay: 0.3,
+                },
+              }}
+              className="mr- [70px] col-[1] row-[1] h-[120px] w-[120px] translate-x-[50px] translate-y-[-30px] rotate-[35deg] overflow-hidden rounded-lg border-[6px] border-white bg-white"
+            >
               <img
                 src={memories[0] || "/placeholder.svg"}
                 className="h-full w-full rounded-md"
                 alt=""
               />
-            </div>
+            </motion.div>
 
-            <div className="col-[1] row-[1] h-[120px] w-[120px] translate-x-[-40px] translate-y-[-30px] rotate-[-15deg] overflow-hidden rounded-lg border-[6px] border-white bg-white">
+            <motion.div
+              initial={{
+                translateX: -40,
+                translateY: -260,
+                rotate: "-23deg",
+              }}
+              animate={{ translateX: -40, translateY: -30, rotate: "-15deg" }}
+              exit={{
+                translateY: 260,
+                rotate: "-5deg",
+                transition: { duration: 0.3, delay: 0.2 },
+              }}
+              transition={{
+                translateY: {
+                  type: "spring",
+                  bounce: 0.45,
+                  duration: 0.6,
+                  delay: 0.5,
+                },
+                rotate: {
+                  type: "spring",
+                  bounce: 0.45,
+                  duration: 0.7,
+                  delay: 0.5,
+                },
+              }}
+              className="col-[1] row-[1] h-[120px] w-[120px] translate-x-[-40px] translate-y-[-30px] rotate-[-15deg] overflow-hidden rounded-lg border-[6px] border-white bg-white"
+            >
               <img
                 src={memories[1] || "/placeholder.svg"}
                 className="h-full w-full rounded-md"
                 alt=""
               />
-            </div>
+            </motion.div>
 
-            <div className="col-[1] row-[1] h-[120px] w-[120px] translate-y-[25px] rotate-[10deg] overflow-hidden rounded-lg border-[6px] border-white bg-white">
+            <motion.div
+              initial={{
+                translateX: 0,
+                translateY: -260,
+                rotate: "-40deg",
+              }}
+              animate={{ translateX: 0, translateY: 25, rotate: "10deg" }}
+              exit={{
+                translateY: 260,
+                rotate: "40deg",
+                transition: { duration: 0.3, delay: 0 },
+              }}
+              transition={{
+                translateY: {
+                  type: "spring",
+                  bounce: 0.45,
+                  duration: 0.6,
+                  delay: 0.4,
+                },
+                rotate: {
+                  type: "spring",
+                  bounce: 0.45,
+                  duration: 0.7,
+                  delay: 0.4,
+                },
+              }}
+              className="col-[1] row-[1] h-[120px] w-[120px] translate-y-[25px] rotate-[10deg] overflow-hidden rounded-lg border-[6px] border-white bg-white"
+            >
               <img
                 src={memories[2] || "/placeholder.svg"}
                 className="h-full w-full rounded-md"
                 alt=""
               />
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         );
       case 4:
         return (
-          <div className="grid grid-cols-[1fr] grid-rows-[1fr]">
-            <div className="mr- [70px] col-[1] row-[1] h-[120px] w-[120px] translate-x-[40px] translate-y-[-40px] rotate-[15deg] overflow-hidden rounded-lg border-[6px] border-white bg-white">
+          <motion.div
+            key="four"
+            className="grid grid-cols-[1fr] grid-rows-[1fr]"
+          >
+            <motion.div
+              initial={{
+                translateX: 40,
+                translateY: -260,
+                rotate: "-15deg",
+              }}
+              animate={{ translateX: 40, translateY: -40, rotate: "15deg" }}
+              exit={{
+                translateY: 260,
+                rotate: "30deg",
+                transition: { duration: 0.3, delay: 0.1 },
+              }}
+              transition={{
+                translateY: {
+                  type: "spring",
+                  bounce: 0.45,
+                  duration: 0.6,
+                  delay: 0.3,
+                },
+                rotate: {
+                  type: "spring",
+                  bounce: 0.45,
+                  duration: 0.7,
+                  delay: 0.3,
+                },
+              }}
+              className="col-[1] row-[1] h-[120px] w-[120px] translate-x-[40px] translate-y-[-40px] rotate-[15deg] overflow-hidden rounded-lg border-[6px] border-white bg-white"
+            >
               <img
                 src={memories[0] || "/placeholder.svg"}
                 className="h-full w-full rounded-md"
                 alt=""
               />
-            </div>
+            </motion.div>
 
-            <div className="col-[1] row-[1] h-[120px] w-[120px] translate-x-[-35px] translate-y-[10px] rotate-[-15deg] overflow-hidden rounded-lg border-[6px] border-white bg-white">
+            <motion.div
+              initial={{
+                translateX: -35,
+                translateY: -260,
+                rotate: "-75deg",
+              }}
+              animate={{ translateX: -35, translateY: 10, rotate: "-15deg" }}
+              exit={{
+                translateY: 260,
+                rotate: "-30deg",
+                transition: { duration: 0.3, delay: 0.05 },
+              }}
+              transition={{
+                translateY: {
+                  type: "spring",
+                  bounce: 0.45,
+                  duration: 0.6,
+                  delay: 0.4,
+                },
+                rotate: {
+                  type: "spring",
+                  bounce: 0.45,
+                  duration: 0.7,
+                  delay: 0.4,
+                },
+              }}
+              className="col-[1] row-[1] h-[120px] w-[120px] translate-x-[-35px] translate-y-[10px] rotate-[-15deg] overflow-hidden rounded-lg border-[6px] border-white bg-white"
+            >
               <img
                 src={memories[1] || "/placeholder.svg"}
                 className="h-full w-full rounded-md"
                 alt=""
               />
-            </div>
+            </motion.div>
 
-            <div className="col-[1] row-[1] h-[120px] w-[120px] translate-x-[-60px] translate-y-[-35px] rotate-[5deg] overflow-hidden rounded-lg border-[6px] border-white bg-white">
+            <motion.div
+              initial={{
+                translateX: -60,
+                translateY: -260,
+                rotate: "-10deg",
+              }}
+              animate={{ translateX: -60, translateY: -35, rotate: "5deg" }}
+              exit={{
+                translateY: 260,
+                rotate: "35deg",
+                transition: { duration: 0.3, delay: 0.15 },
+              }}
+              transition={{
+                translateY: {
+                  type: "spring",
+                  bounce: 0.45,
+                  duration: 0.6,
+                  delay: 0.5,
+                },
+                rotate: {
+                  type: "spring",
+                  bounce: 0.45,
+                  duration: 0.7,
+                  delay: 0.5,
+                },
+              }}
+              className="col-[1] row-[1] h-[120px] w-[120px] translate-x-[-60px] translate-y-[-35px] rotate-[5deg] overflow-hidden rounded-lg border-[6px] border-white bg-white"
+            >
               <img
                 src={memories[2] || "/placeholder.svg"}
                 className="h-full w-full rounded-md"
                 alt=""
               />
-            </div>
+            </motion.div>
 
-            <div className="col-[1] row-[1] h-[120px] w-[120px] translate-x-[45px] translate-y-[15px] rotate-[-35deg] overflow-hidden rounded-lg border-[6px] border-white bg-white">
+            <motion.div
+              initial={{
+                translateX: 45,
+                translateY: -260,
+                rotate: "-145deg",
+              }}
+              animate={{ translateX: 45, translateY: 15, rotate: "-35deg" }}
+              exit={{
+                translateY: 260,
+                rotate: "35deg",
+                transition: { duration: 0.3, delay: 0.15 },
+              }}
+              transition={{
+                translateY: {
+                  type: "spring",
+                  bounce: 0.45,
+                  duration: 0.6,
+                  delay: 0.55,
+                },
+                rotate: {
+                  type: "spring",
+                  bounce: 0.45,
+                  duration: 0.7,
+                  delay: 0.55,
+                },
+              }}
+              className="col-[1] row-[1] h-[120px] w-[120px] translate-x-[45px] translate-y-[15px] rotate-[-35deg] overflow-hidden rounded-lg border-[6px] border-white bg-white"
+            >
               <img
                 src={memories[3] || "/placeholder.svg"}
                 className="h-full w-full rounded-md"
                 alt=""
               />
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         );
       default:
         return null;
@@ -237,19 +525,65 @@ const MemoryWidget = () => {
         Memory Lane
       </h3>
 
-      {renderCards()}
+      <div className="absolute inset-y-0 z-50 my-auto flex w-full items-center justify-between">
+        <button
+          disabled={centeredMonthIndex === 0}
+          onClick={() => setCenteredMonthIndex(centeredMonthIndex - 1)}
+          className="w-5 rounded-r-sm bg-white disabled:bg-white/20"
+        >
+          -
+        </button>
+        <button
+          disabled={centeredMonthIndex === data.length - 1}
+          onClick={() => setCenteredMonthIndex(centeredMonthIndex + 1)}
+          className="w-5 rounded-l-sm bg-white disabled:bg-white/20"
+        >
+          +
+        </button>
+      </div>
+
+      <AnimatePresence mode="popLayout">{renderCards()}</AnimatePresence>
 
       <div className="absolute bottom-10 flex w-full items-center justify-between px-1.5 text-[7px] text-[#515151]">
-        <h6>{formattedBeforeText}</h6>
-        <h6>{formattedAfterText}</h6>
+        <AnimatePresence mode="wait">
+          <motion.h6
+            key={`before-${formattedBeforeText}`}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3, ease: "easeInOut", delay: 0.05 }}
+          >
+            {formattedBeforeText}
+          </motion.h6>
+        </AnimatePresence>
+
+        <AnimatePresence mode="wait">
+          <motion.h6
+            key={`after-${formattedAfterText}`}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3, ease: "easeInOut", delay: 0.05 }}
+          >
+            {formattedAfterText}
+          </motion.h6>
+        </AnimatePresence>
       </div>
 
       <div className="absolute bottom-6 flex w-[280px] items-end">
-        <div
+        <motion.div
           className="flex"
-          style={{
+          initial={{
+            transform: `translateX(${128}px)`,
+          }}
+          animate={{
             transform: `translateX(${-(centeredMonthIndex * 235) + 128}px)`,
-            transition: "transform 0.3s ease-out",
+          }}
+          transition={{
+            type: "spring",
+            bounce: 0.05,
+            duration: 0.5,
+            delay: 0.1,
           }}
         >
           {data.map((monthData, dataIndex) => (
@@ -289,7 +623,7 @@ const MemoryWidget = () => {
               )}
             </div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </div>
   );
