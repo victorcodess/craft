@@ -22,10 +22,7 @@ const TimelineBar = ({
 }: TimelineBarProps) => {
   return (
     <div className="absolute bottom-6 flex w-[280px] items-start">
-      <SwipeContainer
-        onSwipeLeft={onSwipeLeft}
-        onSwipeRight={onSwipeRight}
-      >
+      <SwipeContainer onSwipeLeft={onSwipeLeft} onSwipeRight={onSwipeRight}>
         <motion.div
           className="flex"
           initial={{
@@ -63,16 +60,28 @@ const TimelineBar = ({
                 <div className="h-[12px] w-[1px] rounded-full bg-[#FFF]" />
               </div>
 
-              {dataIndex < data.length && (
-                <div className="flex items-center gap-1.5">
-                  {Array(31)
-                    .fill(null)
-                    .map((_, index) => (
-                      <div
-                        key={index}
-                        className="h-[8px] w-[1px] rounded-full bg-[#3C3C3C]"
-                      />
-                    ))}
+              {dataIndex < data.length - 1 && (
+                <div className="flex w-[211px] items-center">
+                  <svg
+                    width="211"
+                    height="8"
+                    viewBox="0 0 211 8"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    {Array(31)
+                      .fill(null)
+                      .map((_, index) => (
+                        <rect
+                          key={index}
+                          x={index * 6.98}
+                          y="0"
+                          width="1"
+                          height="8"
+                          rx="0.5"
+                          fill="#3C3C3C"
+                        />
+                      ))}
+                  </svg>
                 </div>
               )}
             </div>

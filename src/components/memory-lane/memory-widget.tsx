@@ -7,7 +7,6 @@ import imgFour from "../../assets/memory-widget/img_four.avif";
 import MemoryCards from "./memory-cards";
 import TimelineBar from "./timeline-bar";
 
-
 interface MonthData {
   month: string;
   no_of_memories: number;
@@ -119,7 +118,7 @@ const MemoryWidget = () => {
         Memory Lane
       </h3>
 
-      <div className="absolute inset-y-0 z-50 my-auto flex w-full items-center justify-between">
+      <div className="fl ex absolute inset-y-0 z-50 my-auto hidden h-min w-full items-center justify-between">
         <button
           disabled={centeredMonthIndex === 0}
           onClick={() => setCenteredMonthIndex(centeredMonthIndex - 1)}
@@ -137,9 +136,9 @@ const MemoryWidget = () => {
       </div>
 
       <AnimatePresence mode="popLayout">
-        <MemoryCards 
-          numMemories={centeredMonthData.no_of_memories} 
-          memories={centeredMonthData.memories} 
+        <MemoryCards
+          numMemories={centeredMonthData.no_of_memories}
+          memories={centeredMonthData.memories}
         />
       </AnimatePresence>
 
@@ -169,7 +168,7 @@ const MemoryWidget = () => {
         </AnimatePresence>
       </div>
 
-      <TimelineBar 
+      <TimelineBar
         centeredMonthIndex={centeredMonthIndex}
         data={data}
         onSwipeLeft={() => {
