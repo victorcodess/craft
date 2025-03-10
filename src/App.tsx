@@ -25,7 +25,7 @@ function App() {
         return componentParam;
       }
     }
-    return "audio-widget";
+    return "memory-widget";
   });
 
   const [isMobile, setIsMobile] = useState(false);

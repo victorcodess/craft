@@ -135,8 +135,9 @@ const MemoryWidget = () => {
         </button>
       </div>
 
-      <AnimatePresence mode="popLayout">
+      <AnimatePresence mode="wait">
         <MemoryCards
+          key={centeredMonthIndex}
           numMemories={centeredMonthData.no_of_memories}
           memories={centeredMonthData.memories}
         />

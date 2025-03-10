@@ -14,7 +14,7 @@ const MemoryCards = ({ numMemories, memories }: MemoryCardsProps) => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0, transition: { delay: 0 } }}
-          transition={{ duration: 0.3, ease: "easeInOut", delay: 0.1 }}
+          transition={{ duration: 0.3, ease: "easeInOut", delay: 0 }}
           key="none"
           className="flex flex-col items-center gap-3"
         >
@@ -47,13 +47,13 @@ const MemoryCards = ({ numMemories, memories }: MemoryCardsProps) => {
                 type: "spring",
                 bounce: 0.45,
                 duration: 0.6,
-                delay: 0.4,
+                delay: 0.3,
               },
               rotate: {
                 type: "spring",
                 bounce: 0.45,
                 duration: 0.7,
-                delay: 0.4,
+                delay: 0.3,
               },
             }}
             className="h-[180px] w-[180px] translate-y-[-12px] rotate-[5deg] rounded-lg border-[8px] border-white bg-white"
