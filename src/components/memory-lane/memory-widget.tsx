@@ -1,12 +1,14 @@
 "use client";
 
+import type React from "react";
+
 import { useState } from "react";
 import cloud from "../../assets/memory-widget/cloud.png";
 import imgOne from "../../assets/memory-widget/img_one.avif";
 import imgTwo from "../../assets/memory-widget/img_two.avif";
 import imgThree from "../../assets/memory-widget/img_three.avif";
 import imgFour from "../../assets/memory-widget/img_four.avif";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useMotionValue } from "framer-motion";
 
 interface MonthData {
   month: string;
@@ -14,10 +16,46 @@ interface MonthData {
   memories: string[];
 }
 
-const MemoryWidget = () => {
-  const [centeredMonthIndex, setCenteredMonthIndex] = useState(0);
+interface SwipeContainerProps {
+  children: React.ReactNode;
+  onSwipeLeft: () => void;
+  onSwipeRight: () => void;
+}
 
-  console.log("centeredMonthIndex", centeredMonthIndex);
+const SwipeContainer = ({
+  children,
+  onSwipeLeft,
+  onSwipeRight,
+}: SwipeContainerProps) => {
+  const x = useMotionValue(0);
+
+  const handleDragEnd = (
+    _event: MouseEvent | TouchEvent | PointerEvent,
+    info: { offset: { x: number } },
+  ) => {
+    if (info.offset.x < -50) {
+      onSwipeLeft();
+    } else if (info.offset.x > 50) {
+      onSwipeRight();
+    }
+  };
+
+  return (
+    <motion.div
+      drag="x"
+      dragConstraints={{ left: 0, right: 0 }}
+      dragElastic={0.05}
+      style={{ x }}
+      onDragEnd={handleDragEnd}
+      className="z-50 cursor-grab touch-manipulation active:cursor-grabbing"
+    >
+      {children}
+    </motion.div>
+  );
+};
+
+const MemoryWidget = () => {
+  const [centeredMonthIndex, setCenteredMonthIndex] = useState(9);
 
   const data: MonthData[] = [
     {
@@ -127,13 +165,13 @@ const MemoryWidget = () => {
                   type: "spring",
                   bounce: 0.45,
                   duration: 0.6,
-                  delay: 0.3,
+                  delay: 0.4,
                 },
                 rotate: {
                   type: "spring",
                   bounce: 0.45,
                   duration: 0.7,
-                  delay: 0.3,
+                  delay: 0.4,
                 },
               }}
               className="h-[180px] w-[180px] translate-y-[-12px] rotate-[5deg] rounded-lg border-[8px] border-white bg-white"
@@ -520,7 +558,6 @@ const MemoryWidget = () => {
 
   return (
     <div className="absolute inset-0 mx-auto my-auto flex h-[320px] w-[280px] flex-col items-center justify-center overflow-hidden rounded-[60px] border-[4px] border-[#222] bg-[#040404]">
-      {/* <div className="absolute inset-0 mx-auto h-[400px] w-[1px] bg-white" /> */}
       <h3 className="absolute top-5 text-lg font-normal text-white">
         Memory Lane
       </h3>
@@ -570,60 +607,72 @@ const MemoryWidget = () => {
         </AnimatePresence>
       </div>
 
-      <div className="absolute bottom-6 flex w-[280px] items-end">
-        <motion.div
-          className="flex"
-          initial={{
-            transform: `translateX(${128}px)`,
+      <div className="absolute bottom-6 flex w-[280px] items-start">
+        <SwipeContainer
+          onSwipeLeft={() => {
+            if (centeredMonthIndex < data.length - 1) {
+              setCenteredMonthIndex(centeredMonthIndex + 1);
+            }
           }}
-          animate={{
-            transform: `translateX(${-(centeredMonthIndex * 235) + 128}px)`,
-          }}
-          transition={{
-            type: "spring",
-            bounce: 0.05,
-            duration: 0.5,
-            delay: 0.1,
+          onSwipeRight={() => {
+            if (centeredMonthIndex > 0) {
+              setCenteredMonthIndex(centeredMonthIndex - 1);
+            }
           }}
         >
-          {data.map((monthData, dataIndex) => (
-            <div className="flex items-end" key={monthData.month}>
-              <div
-                id="month"
-                className="flex w-[24px] flex-col items-center justify-center gap-[1px] text-white"
-              >
+          <motion.div
+            className="flex"
+            initial={{
+              transform: `translateX(${128}px)`,
+            }}
+            animate={{
+              transform: `translateX(${-(centeredMonthIndex * 235) + 128}px)`,
+            }}
+            transition={{
+              duration: 0.6,
+              type: "spring",
+              bounce: 0.05,
+            }}
+          >
+            {data.map((monthData, dataIndex) => (
+              <div className="flex items-end" key={monthData.month}>
                 <div
-                  className={`flex h-[11px] w-[11px] items-center justify-center rounded-full ${
-                    monthData.no_of_memories > 0
-                      ? "bg-[#5494FC]/[0.25]"
-                      : "bg-[#181818]"
-                  }`}
+                  id="month"
+                  className="flex w-[24px] flex-col items-center justify-center gap-[1px] text-white"
                 >
-                  <h5
-                    className={`mb-[0px] ml-[1px] text-[6px] ${monthData.no_of_memories > 0 ? "text-[#4882E7]" : ""}`}
+                  <div
+                    className={`flex h-[11px] w-[11px] items-center justify-center rounded-full ${
+                      monthData.no_of_memories > 0
+                        ? "bg-[#5494FC]/[0.25]"
+                        : "bg-[#181818]"
+                    }`}
                   >
-                    {monthData.no_of_memories}
-                  </h5>
+                    <h5
+                      className={`mb-[0px] ml-[1px] text-[6px] ${monthData.no_of_memories > 0 ? "text-[#4882E7]" : ""}`}
+                    >
+                      {monthData.no_of_memories}
+                    </h5>
+                  </div>
+                  <h4 className="mb-[2px] text-[9px]">{monthData.month}</h4>
+                  <div className="h-[12px] w-[1px] rounded-full bg-[#FFF]" />
                 </div>
-                <h4 className="mb-[2px] text-[9px]">{monthData.month}</h4>
-                <div className="h-[12px] w-[1px] rounded-full bg-[#FFF]" />
-              </div>
 
-              {dataIndex < data.length && (
-                <div className="flex items-center gap-1.5">
-                  {Array(31)
-                    .fill(null)
-                    .map((_, index) => (
-                      <div
-                        key={index}
-                        className="h-[8px] w-[1px] rounded-full bg-[#3C3C3C]"
-                      />
-                    ))}
-                </div>
-              )}
-            </div>
-          ))}
-        </motion.div>
+                {dataIndex < data.length && (
+                  <div className="flex items-center gap-1.5">
+                    {Array(31)
+                      .fill(null)
+                      .map((_, index) => (
+                        <div
+                          key={index}
+                          className="h-[8px] w-[1px] rounded-full bg-[#3C3C3C]"
+                        />
+                      ))}
+                  </div>
+                )}
+              </div>
+            ))}
+          </motion.div>
+        </SwipeContainer>
       </div>
     </div>
   );
