@@ -6,6 +6,7 @@ import PodcastWidget from "./components/audio-widget/audio-widget";
 import ComponentSelector from "./components/component-selector";
 import Toolbar from "./components/figma-toolbar/toolbar";
 import MemoryWidget from "./components/memory-lane/memory-widget";
+import CopyPaste from "./components/copy-paste/copy-paste";
 
 function App() {
   const [activeComponent, setActiveComponent] = useState<string>(() => {
@@ -15,6 +16,7 @@ function App() {
       if (
         componentParam &&
         [
+          "copy-paste",
           "fixed-nav",
           "floating-nav",
           "audio-widget",
@@ -91,6 +93,19 @@ function App() {
 
   const renderActiveComponent = () => {
     switch (activeComponent) {
+      case "copy-paste":
+        return (
+          <motion.div
+            key="copy-paste"
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 50 }}
+            transition={{ duration: 0.35, ease: "easeInOut" }}
+            className="flex h-screen w-full items-center justify-center"
+          >
+            <CopyPaste />
+          </motion.div>
+        );
       case "fixed-nav":
         return (
           <motion.div

@@ -8,6 +8,7 @@ type ComponentOption = {
 };
 
 const options: ComponentOption[] = [
+  { id: "copy-paste", label: "Copy Paste" },
   { id: "memory-widget", label: "Memory Widget" },
   { id: "audio-widget", label: "Audio Widget" },
   { id: "fixed-nav", label: "Fixed Navbar" },
