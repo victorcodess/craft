@@ -2,8 +2,8 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import cardImg from "../../assets/copy-paste/card-img.avif";
 
 // Animation constants
-const DRAG_SCALE = 0.2; // Scale factor when dragging (20% of original size)
-const ANIMATION_DURATION = 400; // Duration in milliseconds for all animations
+const DRAG_SCALE = 0.15; // Scale factor when dragging (20% of original size)
+const ANIMATION_DURATION = 500; // Duration in milliseconds for all animations
 const LERP_FACTOR = 0.15; // Linear interpolation factor for trailing effect (0-1, lower = more trailing)
 const SNAP_THRESHOLD = 0.1; // Distance threshold in pixels to snap to target (prevents jitter)
 
@@ -327,7 +327,7 @@ const CopyPaste = () => {
       {/* Paste container: displays image when imageLocation is "paste" */}
       <div
         id="paste-container"
-        className="cursor-paste relative h-[400px] w-[300px] overflow-hidden border border-black/10 bg-black/5 hover:bg-black/10 transition-colors duration-500"
+        className="cursor-paste relative h-[400px] w-[300px] overflow-hidden border border-black/10 bg-black/5 transition-all duration-500 hover:bg-black/10 active:scale-95"
         ref={pasteContainerRef}
         onClick={handlePasteClick}
       >
@@ -346,7 +346,11 @@ const CopyPaste = () => {
           src={cardImg}
           alt="card"
           id="paste-img"
-          className="pointer-events-none absolute h-[400px] w-[300px] object-cover"
+          className={`pointer-events-none absolute h-[400px] w-[300px] object-cover ${
+            status !== "dragging"
+              ? ""
+              : "border-[15px] border-white shadow-2xl transition-all duration-300"
+          }`}
           style={{
             top: displayedPosition.y, // Position with trailing effect
             left: displayedPosition.x,

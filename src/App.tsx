@@ -101,7 +101,7 @@ function App() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 50 }}
             transition={{ duration: 0.35, ease: "easeInOut" }}
-            className="flex h-screen w-full items-center justify-center"
+            className="flex h-[90vh] overflow-hidden w-full items-center justify-center"
           >
             <CopyPaste />
           </motion.div>
