@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import cardImg from "../../assets/copy-paste/card-img.avif";
 
 // Animation constants
@@ -26,6 +26,8 @@ const CopyPaste = () => {
   const pasteContainerRef = useRef<HTMLDivElement>(null); // Paste container element
   const dropAnimationTimeoutRef = useRef<number | null>(null); // Timeout ID for drop animation completion
   const animationFrameRef = useRef<number | null>(null); // Animation frame ID for interpolation loop
+  const lastClientPositionRef = useRef({ x: 0, y: 0 }); // Tracks the latest cursor position for keyboard shortcuts
+  const dragOriginRef = useRef<ContainerType | null>(null); // Tracks which container the current drag originated from
 
   // State management
   const [status, setStatus] = useState<Status>("idle"); // Current state in the state machine
@@ -65,6 +67,22 @@ const CopyPaste = () => {
         cancelAnimationFrame(animationFrameRef.current);
       }
     };
+  }, []);
+
+  /**
+   * Mouse tracking effect: Listens for mouse movement during drag operations.
+   * Updates cursorPosition (target) which the displayedPosition will follow with trailing effect.
+   */
+  useEffect(() => {
+    const handleMouseMove = (event: MouseEvent) => {
+      lastClientPositionRef.current = {
+        x: event.clientX,
+        y: event.clientY,
+      };
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
   }, []);
 
   /**
@@ -135,12 +153,12 @@ const CopyPaste = () => {
    * Clears any pending drop animation timeout to prevent state conflicts
    * when starting a new drag operation.
    */
-  const clearDropTimeout = () => {
+  const clearDropTimeout = useCallback(() => {
     if (dropAnimationTimeoutRef.current) {
       window.clearTimeout(dropAnimationTimeoutRef.current);
       dropAnimationTimeoutRef.current = null;
     }
-  };
+  }, []);
 
   /**
    * Initiates a drag operation from the specified container.
@@ -151,52 +169,55 @@ const CopyPaste = () => {
    * 3. Starts scale animation (1.0 -> 0.2) and position animation (center -> cursor)
    * 4. After animation completes, switches to "following" phase for trailing effect
    */
-  const startDraggingFrom = (
-    origin: ContainerType,
-    event: React.MouseEvent<HTMLDivElement>,
-  ) => {
-    // Validate that image is in the correct location before allowing drag
-    if (
-      (origin === "copy" && imageLocation !== "copy") ||
-      (origin === "paste" && imageLocation !== "paste")
-    ) {
-      return;
-    }
+  const startDraggingFrom = useCallback(
+    (origin: ContainerType, pointer: { clientX: number; clientY: number }) => {
+      // Validate that image is in the correct location before allowing drag
+      if (
+        (origin === "copy" && imageLocation !== "copy") ||
+        (origin === "paste" && imageLocation !== "paste")
+      ) {
+        return;
+      }
 
-    clearDropTimeout();
+      clearDropTimeout();
 
-    const { clientX, clientY } = event;
-    const pointerPoint = getRelativePoint(clientX, clientY);
-    const originRef = origin === "copy" ? copyContainerRef : pasteContainerRef;
-    const originRect = originRef.current?.getBoundingClientRect();
-    // Start from container center for smooth animation, fallback to cursor if container not found
-    const originCenter = originRect
-      ? getRelativePoint(
-          originRect.left + originRect.width / 2,
-          originRect.top + originRect.height / 2,
-        )
-      : pointerPoint;
+      dragOriginRef.current = origin;
 
-    // Initialize drag state: image becomes floating, starts at full scale and container center
-    setImageLocation("floating");
-    setFloatingScale(1);
-    setCursorPosition(originCenter);
-    setDisplayedPosition(originCenter);
-    setStatus("dragging");
-    setDragPhase("initial");
+      const { clientX, clientY } = pointer;
+      const pointerPoint = getRelativePoint(clientX, clientY);
+      const originRef =
+        origin === "copy" ? copyContainerRef : pasteContainerRef;
+      const originRect = originRef.current?.getBoundingClientRect();
+      // Start from container center for smooth animation, fallback to cursor if container not found
+      const originCenter = originRect
+        ? getRelativePoint(
+            originRect.left + originRect.width / 2,
+            originRect.top + originRect.height / 2,
+          )
+        : pointerPoint;
 
-    // Use requestAnimationFrame to ensure DOM is ready, then start animations
-    requestAnimationFrame(() => {
-      // Scale down to DRAG_SCALE and move to cursor position (CSS transition handles animation)
-      setFloatingScale(DRAG_SCALE);
-      setCursorPosition(pointerPoint);
+      // Initialize drag state: image becomes floating, starts at full scale and container center
+      setImageLocation("floating");
+      setFloatingScale(1);
+      setCursorPosition(originCenter);
+      setDisplayedPosition(originCenter);
+      setStatus("dragging");
+      setDragPhase("initial");
 
-      // After initial animation completes, switch to trailing mode
-      setTimeout(() => {
-        setDragPhase("following");
-      }, ANIMATION_DURATION);
-    });
-  };
+      // Use requestAnimationFrame to ensure DOM is ready, then start animations
+      requestAnimationFrame(() => {
+        // Scale down to DRAG_SCALE and move to cursor position (CSS transition handles animation)
+        setFloatingScale(DRAG_SCALE);
+        setCursorPosition(pointerPoint);
+
+        // After initial animation completes, switch to trailing mode
+        setTimeout(() => {
+          setDragPhase("following");
+        }, ANIMATION_DURATION);
+      });
+    },
+    [clearDropTimeout, imageLocation],
+  );
 
   /**
    * Drops the floating image into the target container.
@@ -206,34 +227,41 @@ const CopyPaste = () => {
    * 2. Animates image to center and scales back to 1.0
    * 3. After animation, updates state to place image in target container
    */
-  const dropTo = (target: ContainerType) => {
-    const targetRef = target === "paste" ? pasteContainerRef : copyContainerRef;
-    const targetRect = targetRef.current?.getBoundingClientRect();
-    const rootRect = rootRef.current?.getBoundingClientRect();
+  const dropTo = useCallback(
+    (target: ContainerType) => {
+      const targetRef =
+        target === "paste" ? pasteContainerRef : copyContainerRef;
+      const targetRect = targetRef.current?.getBoundingClientRect();
+      const rootRect = rootRef.current?.getBoundingClientRect();
 
-    if (!targetRect || !rootRect) return;
+      if (!targetRect || !rootRect) return;
 
-    // Calculate center of target container in relative coordinates
-    const targetCenter = {
-      x: targetRect.left - rootRect.left + targetRect.width / 2,
-      y: targetRect.top - rootRect.top + targetRect.height / 2,
-    };
+      // Calculate center of target container in relative coordinates
+      const targetCenter = {
+        x: targetRect.left - rootRect.left + targetRect.width / 2,
+        y: targetRect.top - rootRect.top + targetRect.height / 2,
+      };
 
-    // Start drop animation: scale back to 1.0 and move to container center
-    setStatus(target === "paste" ? "animating-to-paste" : "animating-to-copy");
-    setFloatingScale(1);
-    setCursorPosition(targetCenter);
-    setDisplayedPosition(targetCenter);
+      // Start drop animation: scale back to 1.0 and move to container center
+      setStatus(
+        target === "paste" ? "animating-to-paste" : "animating-to-copy",
+      );
+      setFloatingScale(1);
+      setCursorPosition(targetCenter);
+      setDisplayedPosition(targetCenter);
 
-    clearDropTimeout();
-    // After animation completes, finalize the drop
-    dropAnimationTimeoutRef.current = window.setTimeout(() => {
-      setStatus(target === "paste" ? "pasted" : "idle");
-      setImageLocation(target);
-      setDragPhase("idle");
-      dropAnimationTimeoutRef.current = null;
-    }, ANIMATION_DURATION);
-  };
+      clearDropTimeout();
+      // After animation completes, finalize the drop
+      dropAnimationTimeoutRef.current = window.setTimeout(() => {
+        setStatus(target === "paste" ? "pasted" : "idle");
+        setImageLocation(target);
+        setDragPhase("idle");
+        dragOriginRef.current = null;
+        dropAnimationTimeoutRef.current = null;
+      }, ANIMATION_DURATION);
+    },
+    [clearDropTimeout],
+  );
 
   /**
    * Handles clicks on the copy container.
@@ -244,7 +272,10 @@ const CopyPaste = () => {
     if (status === "dragging") {
       dropTo("copy");
     } else if (status === "idle" && imageLocation === "copy") {
-      startDraggingFrom("copy", event);
+      startDraggingFrom("copy", {
+        clientX: event.clientX,
+        clientY: event.clientY,
+      });
     }
   };
 
@@ -262,9 +293,62 @@ const CopyPaste = () => {
     if (status === "dragging") {
       dropTo("paste");
     } else if (status === "pasted" && imageLocation === "paste") {
-      startDraggingFrom("paste", event);
+      startDraggingFrom("paste", {
+        clientX: event.clientX,
+        clientY: event.clientY,
+      });
     }
   };
+
+  /**
+   * Keyboard shortcuts (Cmd + C / Cmd + V) to mirror copy & paste interactions.
+   */
+  const handleCopyShortcut = useCallback(() => {
+    if (status === "dragging") {
+      dropTo("copy");
+      return;
+    }
+
+    if (status === "idle" && imageLocation === "copy") {
+      const { x, y } = lastClientPositionRef.current;
+      startDraggingFrom("copy", { clientX: x, clientY: y });
+    } else if (status === "pasted" && imageLocation === "paste") {
+      const { x, y } = lastClientPositionRef.current;
+      startDraggingFrom("paste", { clientX: x, clientY: y });
+    }
+  }, [dropTo, imageLocation, startDraggingFrom, status]);
+
+  const handlePasteShortcut = useCallback(() => {
+    if (status === "animating-to-paste" || status === "animating-to-copy") {
+      return;
+    }
+
+    if (status === "dragging") {
+      const origin = dragOriginRef.current;
+      const target: ContainerType = origin === "paste" ? "copy" : "paste";
+      dropTo(target);
+    }
+  }, [dropTo, status]);
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (!event.metaKey) {
+        return;
+      }
+
+      const key = event.key.toLowerCase();
+      if (key === "c") {
+        event.preventDefault();
+        handleCopyShortcut();
+      } else if (key === "v") {
+        event.preventDefault();
+        handlePasteShortcut();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [handleCopyShortcut, handlePasteShortcut]);
 
   /**
    * Memoized CSS transition string for the floating image.
@@ -349,7 +433,7 @@ const CopyPaste = () => {
           className={`pointer-events-none absolute h-[400px] w-[300px] object-cover ${
             status !== "dragging"
               ? ""
-              : "border-[15px] border-white shadow-2xl transition-all duration-300"
+              : "border-[10px] border-white shadow-2xl transition-all duration-300"
           }`}
           style={{
             top: displayedPosition.y, // Position with trailing effect
